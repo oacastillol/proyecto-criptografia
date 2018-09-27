@@ -8,6 +8,7 @@ class Development(object):
     TESTING = False
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY_DEV')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL_DEV')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class Production(object):
     """
