@@ -12,6 +12,7 @@ En la carpeta **shared** ubicar las implementaciónes de los algoritmos de cifra
 
 Se Desarrollo el RestAPI para la aplicación, a continuación listo los endpoints:
 | url                          | metodo   | descripcion                               | request                                                    | response                     |
+|------------------------------|----------|-------------------------------------------|------------------------------------------------------------|------------------------------|
 | /api/v1/users                | `POST`   | Crear un nuevo usuario                    | *BODY* username, password                                  | *BODY* 'jwt_token'           |
 | /api/v1/users                | `GET`    | Lista los usuarios registrados            | *HEADERS* api-token                                        | *BODY* lista de usuarios     |
 | /api/v1/users/login          | `POST`   | Logea al usuario                          | *BODY* username, password                                  | *BODY* 'jwt_token'           |
