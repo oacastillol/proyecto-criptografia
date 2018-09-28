@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # Implementación de un algritmo de cifrado propio.
 
-import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
+from keyGenerator import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
 
 # MAIN
 msg = "camilo"
 key = "camilo"
 
-keyGen = keyGenerator.keyGenerator(key, 4)
+keyGen = keyGenerator(key, 4)
 print(msg, key, keyGen)
 
 # Ejemplo de como evaluar cada caso
