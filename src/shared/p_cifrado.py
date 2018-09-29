@@ -43,9 +43,18 @@ def c_suma (list1,list2):
 # corrimiento a la izquierda
 def c_corrimiento (list1):
     lista = []
-    for m in range(len(list1)):
-        #algo reacio con el modulo 256 pero dejarlo asi
-        lista.append((list1[m-1])%256)
+    rango = int(len(list1))
+    m=0
+    print(list1,rango,m)
+    while m<(rango):
+        if m<(rango-1):
+            m += 1
+            lista.append(list1[m])
+            #print ('m: ', m , 'list : ',list)
+        else:
+            m += 1
+            lista.append(list1[0])
+            #print ('m: ', m , 'list : ',list)
     return lista
 #Bloques, etapa intermedia, si es "l" o "r" --corta en la mitad y toma la primera o segunda parte
 def c_bloque(list1,lr):
@@ -115,8 +124,11 @@ def pcifrado(message, key):
 #MAIN
 #tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
 #estatico = list('gimg1859')
-message = list('sehizota')
+#message = list('sehizota')
+message = list('sehi')
 key = list ('dddddddd')
+corimiento = c_corrimiento(message)
+print (corimiento)
 #r = 'r'
 #l = 'l'
 #keyGen = keyGenerator(key, 5)
@@ -130,5 +142,5 @@ key = list ('dddddddd')
 #print ('---------------')
 #esta = gimg1859()
 #print (" es gimg" ,esta)
-ant = pcifrado(message,key)
-print ('cifrado gimg1859: ' ,ant)
+#ant = pcifrado(message,key)
+#print ('cifrado gimg1859: ' ,ant)
