@@ -77,7 +77,7 @@ def c_unir (list1,list2):
         else:
             print("paso algo inesperado ome")
         #print('oo : ', lista)
-    print (lista)
+    #print (lista)
     return lista
 
 def pcifrado(message, key):
@@ -90,8 +90,8 @@ def pcifrado(message, key):
     #print ("Estatico : ", estatico, "list1 ",list1)
     c_1 = c_suma(estatico,list1)
     #Estapa intermedia - podria usar un def mas pero mientras tanto asi
-    l_0 = c_bloque(c_1,l)
-    r_0 = c_bloque(c_1,r)
+    l_0 = c_bloque(c_1,'l')
+    r_0 = c_bloque(c_1,'r')
 
     l_1 = c_corrimiento(r_0)
     r_1 = c_suma(l_0,list2)
@@ -109,16 +109,18 @@ def pcifrado(message, key):
     cunir = c_unir(l_4,r_4)
     c_2 = c_suma(estatico, cunir)
     c = c_caracter(c_2)
-    return (str(c))
+    #c_2 muestra lo cifrado por bytes
+    #print(c_2)
+    return c
 #MAIN
 #tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
-estatico = list('gimg1859')
+#estatico = list('gimg1859')
 message = list('sehizota')
 key = list ('dddddddd')
-r = 'r'
-l = 'l'
+#r = 'r'
+#l = 'l'
 #keyGen = keyGenerator(key, 5)
-nzk = list(c_ascii(estatico))
+#nzk = list(c_ascii(estatico))
 #print (nzk)
 #cbloque = c_bloque(nzk,l)
 #cbloque1 = c_bloque(nzk,r)
