@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% block scripts %}
+    {{ super() }}
+<script type="text/javascript">  
+    $(function() {
+    $('a#entrar').bind('click', function() {
+	a=$('input[name="username"]').val();
+	b=$('input[name="password"]').val();
+	$.ajax({
+	    data:JSON.stringify({"username":a,
+				 "password":b }), 
+	    type: 'POST',
+	    dataType: "json",
+	    contentType: "application/json; charset=utf-8",
+	    url: "api/v1/users/login",
+	})
+	    .done(function( data, textStatus, jqXHR ) {
+		if ( console && console.log ) {
+		    console.log(data );
+		}
+	    })
+	    .fail(function( jqXHR, textStatus, errorThrown ) {
+		if ( console && console.log ) {
+		    console.log( "La solicitud a fallado: " +  textStatus);
+		}
+	    });
+    });
+  });
+</script>
+{% endblock %}
+<div class="container">
+  <h1>{{ cache.token }}</h1>
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="nombre de usuario" name="username">
+    <input type="text" class="form-control" placeholder="Contraseña" name="password">
+    <a href=# id="entrar">entrar</a>
+  </div>
+</div>
+{% endblock %}
