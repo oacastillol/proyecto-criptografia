@@ -18,17 +18,13 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-	{% if not g.user %}
-        <li class="active"><a href="/login">Ingresar</a></li>
-	{% else %}
-	<li class="active"><a href="/logout">Salir</a></li>
-	{% endif %}
-	{% if not g.user %}
-        <li><a href="/messages">Mensajes</a></li>
-	{% endif %}
+        <li class="active"> <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myLogin">Ingresar</button>
+
+	
+        <li><button type="button" class="btn btn-link" id="messages">Mensajes</button></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
+	<li><button type="button" class="btn btn-link" id="logout">Salir</button></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

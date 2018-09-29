@@ -11,7 +11,7 @@ def create_app(env_name):
   """
   
   # app initiliazation
-  app = Flask(__name__)
+  app = Flask(__name__, static_url_path="/static", static_folder="templates/static")
   Bootstrap(app)
   app.config.from_object(app_config[env_name])
   bcrypt.init_app(app)
@@ -22,31 +22,12 @@ def create_app(env_name):
   app.register_blueprint(cipher_blueprint, url_prefix='/api/v1/cipher')
   
   """
-PARTIAL FRONT
+  PARTIAL FRONT
   """
-  cache={'token':''}
   @app.route('/', methods=['GET'])
   def index():
     """
     Load first page
     """
-    return render_template("index.html",cache=cache)
-  @app.route('/login', methods=['GET'])
-  def login():
-    """
-    Load first page
-    """
-    return render_template("login.html",cache=cache)
-  @app.route('/logout', methods=['GET'])
-  def logout():
-    """
-    Load first page
-    """
-    return render_template("index.html",cache=cache)
-  @app.route('/messages', methods=['GET'])
-  def messages():
-    """
-    Load first page
-    """
-    return render_template("index.html",cache=cache)
+    return render_template("index.html")
   return app

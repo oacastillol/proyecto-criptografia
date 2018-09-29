@@ -2,6 +2,128 @@
 
 {% block content %}
 <div class="container">
-  <h1>{{ cache.token }}</h1>
+    <div class="row">
+	<div class="form-group">
+            <div class="input-group col-sm-12">
+		<label for="typeCipher" class="col-sm-2 control-label">Tipo de Cifrado</label>
+		<div class="col-sm-10">
+		    <select class="form-control" id="typeCipher">
+			<option>DES</option>
+			<option>TEAM</option>
+		    </select>
+		</div>
+	    </div>
+	</div>
+    </div>
+    <div class="row">
+	<div class="form-group">
+	    <div class="input-group col-sm-12">
+		<label for="messageIn" >Texto de entrada</label>
+		<textarea class="form-control" rows="5" id="messageIn"></textarea>
+	    </div>
+	</div>
+    </div>
+    <div class="row">
+	<div class="form-group">
+	    <div class="input-group col-sm-12">
+		<label for="key" class="col-sm-2 control-label">llave de cifrado</label>
+		<div class="col-sm-4">
+		    <input class="form-control" type="text" id="key"></input>
+		</div>
+		<div class="col-sm-6">
+		    <div class="btn-group" role="group" aria-label="Ejecutar">
+			<button type="button" class="btn btn-default" id="cifrar">Cifrar</button>
+			<button type="button" class="btn btn-default" id="descifrar">Descifrar</button>
+		    </div>
+		</div>
+	    </div>
+	</div>
+    </div>
+    <div class="row">
+	<div class="form-group">
+	    <div class="input-group col-sm-12">
+		<label for="messageOut">Salida</label>
+		<textarea class="form-control" rows="5" id="messageOut"></textarea>
+	    </div>
+	</div>
+    </div>
+    <div class="row">
+	<div class="form-group">
+	    <div class="input-group col-sm-12">
+		<label for="titleMessage" class="col-sm-2 control-label">Titulo</label>
+		<div class="col-sm-8">
+		    <input type="text" id="titleMessage" class="form-control"></input>
+		    <span class="input-group-btn">
+			<button class="btn btn-default" type="button" id="guardar">Guardar</button>
+		    </span>
+		</div>
+	    </div>
+	</div>
+    </div>
 </div>
+
+<div class="modal fade" id="myLogin" role="dialog">
+    <div class="modal-dialog">
+	
+	<!-- Modal content-->
+	<div class="modal-content">
+            <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h4 class="modal-title">Login</h4>
+            </div>
+            <div class="modal-body">
+		<p><input type="text" class="form-control" name="username" id="username" placeholder="Username"></p>
+		<p><input type="password" class="form-control" name="password" id="password" placeholder="Password"></p>
+		<button type="button" class="btn btn-info" id="entrar">Entrar</button>
+		<p><button type="button" class="btn btn-primary" id="registrar">Registrar</button></p>
+            </div>
+            <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+	</div>
+	
+    </div>
+</div>
+<div class="modal fade" id="myMessage" role="dialog">
+    <div class="modal-dialog  modal-lg">
+	
+	<!-- Modal content-->
+	<div class="modal-content">
+            <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h4 class="modal-title">Mensajes</h4>
+            </div>
+            <div class="modal-body">
+		<table class="table" id="tbMessages">
+		    <thead>
+			<tr>
+			    <th>Título</th>
+			    <th>Mensajes</th>
+			</tr>
+		    </thead>
+		    <tbody id="tbodyM">
+			<tr>
+			    <td>
+				<div class="radio" id="valor">
+				    <label>
+					<input type="radio" name="valor1" checked>Título</label>
+				</div>
+			    </td>
+			    <td>jsadoiajsoidjaoi</td>
+			</tr>
+		    </tbody>
+		</table>
+            </div>
+            <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+	</div>
+	
+    </div>
+</div>
+{% block scripts %}
+
+{{super()}}
+<script src="{{url_for('static', filename='index.js')}}"></script>
+{% endblock %}
 {% endblock %}
