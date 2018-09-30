@@ -109,6 +109,16 @@ def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
     bitsres = bits.zfill(8 * ((len(bits) + 7) // 8))
     return bitsres
 
+#funciones para retornar el string teniendo en base bits
+def text_from_bits(bits):
+	n = int(bits,2)
+	print("n",n)
+	print( binascii.unhexlify('%x' % n))
+	return binascii.unhexlify('%x' % n)
+
+
+
+
 #Realiza la permutacion del bloque entrante con la tabla correspondiente, usando un mapeo de funcion lambda
 #IN -> tabla: tabla previamente generada que dará el orden resultante de la permutación
 #IN -> bloque: el bloque de datos a modificar, en este caso el manejo de las llaves
@@ -116,13 +126,18 @@ def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
 def permutar(tabla, bloque):
 		return list(map(lambda x: bloque[x], tabla))
 
-def cipher(msg,key):
+
+
+
+
+#Funcion de cifrado/desifrado, en ella se calculan las llaves a usar para la k asignada por el usuario, y el mensaje resultante
+
+def cipher(msg,key,type):
 
 #tratado de la llave y posterior generacion de llaves
 	keyB = text_to_bits(key)
 	keyB = [keyB[i:i+1] for i in range(0, len(keyB), 1)]
 	keyGen = keyGenDES(keyB)
-	print(keyGen)
 #tratado del mensaje para algoritmo, resultado en bits de la primera permutacion IP
 	mB = text_to_bits(msg)
 	mB = [keyB[i:i+1] for i in range(0, len(mB), 1)]
@@ -132,10 +147,14 @@ def cipher(msg,key):
 #division de mensaje luego de permutacion
 	L = mB[:32]
 	R = mB[32:]
-	print(R)
 
-#iniciacion de iteracion para uso de llaves
-	it = 0
+	if type == "chiper":
+		#iniciacion de iteracion para uso de llaves con su offsite
+		it = 0
+		itoff = 1
+	else:
+		it = 15
+		itoff = -1
 	i = 0
 	while i< 16:
 		#temporal para ser reemplazado en proxima iteracion
@@ -148,13 +167,72 @@ def cipher(msg,key):
 		j = 0
 		B = []
 		while j < len(R):
-			print("R",type(R[j]))
-			print("KG",type(keyGen[it][j]))
-			R[j] = R[j] ^ keyGen[it][j]
 
-	print(B)
+			temp = ''.join(str(R[j]).strip("['']"))
+			R[j] = int(temp) ^ int(keyGen[it][j])
+
+			j += 1
+			if j % 6 == 0:
+				B.append(R[j-6:j])
+
+		#iniciacion de arreglo Bn resultante, y posicion a comparar
+		k = 0
+		Bn = [0] * 32
+		pos = 0
+		while k < 8:
+			#Suma de bits entre posiciones 1 y 6 de B[k]
+			m = (B[k][0] << 1) + B[k][5]
+			#Suma de posiciones 2,3,4 y 5 de B[k]
+			n = (B[k][1] << 3) + (B[k][2] << 2) + (B[k][3] << 1) + B[k][4]
+
+			#encontrar valor de las tablas SBOX[k]
+			v = sbox[k][(m<<4) + n]
+
+			#conversion del valor entero v a bits, primero mirando and con 1000 y luego corrimiento necesario
+			Bn[pos] = (v & 8) >> 3
+			Bn[pos + 1] = (v & 4) >> 2
+			Bn[pos + 2] = (v & 2) >> 1
+			Bn[pos + 3] = v & 1
+
+			pos+=4
+			k+=1
+
+		#permutacion final de funcion f entre el Bn generado y la tabla p
+		R = permutar(p,Bn)
+
+		#Xor final del proceso, entre el nuevo R y el viejo L
+		j=0
+		while j < len(R):
+			temp = ''.join(str(L[j]).strip("['']"))
+			R[j] = R[j] ^ int(temp)
+			j+=1
+
+		#asignar nuevo L al viejo R guardado en temp
+		L = tempR
+
+		#se calcula siguiente paso a probar
+		it += itoff
+
+		i += 1
+
+	#permutacion de ultimo paso entre bits completos y el ipInv
+	fStep = permutar(ipInv, R + L)
+
+	print("final", fStep)
+
+
+	#FALTA PASO DE BITS A MENSAJE
+	temp = ''.join(map(str,fStep))
+	temp2 = '0b'
+	print("split",temp2.split())
+	temp = temp2 + temp
+	print("tempo",temp)
+	result = text_from_bits(temp)
+	print(result)
+	return result
+
 
 # MAIN
 msg = "testting"
 key = "testing2"
-cipher(msg,key)
+cipher(msg,key,"chiper")

@@ -1,3 +1,5 @@
+import binascii
+
 #Permutacion y reduccion PC1
 pc1 = [56, 48, 40, 32, 24, 16,  8,
 		  0, 57, 49, 41, 33, 25, 17,
@@ -26,20 +28,29 @@ left_rotations = [
 		1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1
 	]
 
-#Realiza la permutacion del bloque entrante con la tabla correspondiente, usando un mapeo de funcion lambda
-#IN -> tabla: tabla previamente generada que dará el orden resultante de la permutación
-#IN -> bloque: el bloque de datos a modificar, en este caso el manejo de las llaves
-#OUT-> lista de datos tratados para que el bloque quede organizado como la tabla dada
+#Genera el string de bits haciendo primero la conversion de string a hex y leugo de hex a bits
+#IN -> text: string a ser transformado
+#IN -> encoding: Necesario para encode de string, encargado de reconocimiento de caracteres
+#IN -> errors: Necesario para encode, define si muestra o no errores o adverencias, definido como no mostrar.
+#OUT -> bitsres: resultado de correccion de bits con veros a la izquierda, para completar los 64bits
+def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
+    bits = bin(int(binascii.hexlify(text.encode(encoding, errors)), 16))[2:]
+    bitsres = bits.zfill(8 * ((len(bits) + 7) // 8))
+    return bitsres
+
+
 def permutar(tabla, bloque):
 		return list(map(lambda x: bloque[x], tabla))
 
 # Genera las llaves de cada iteración
-# IN -> key: llave ingresada por el usuario STRING
+# IN -> key: llave ingresada por el usuario
 # OUT -> keys: lista de keys.
 def keyGenDES(key):
 
-    #Primera permutacion pc1 para las llaves
-    keyB = permutar(pc1, key)
+    keyB = text_to_bits(key)
+    keyB = [keyB[i:i+1] for i in range(0, len(keyB), 1)]
+
+    keyB = permutar(pc1, keyB)
 
     keys = [[0] * 48] * 16
     C = []
@@ -49,7 +60,7 @@ def keyGenDES(key):
     #Dividir el k en derecha e izquierda
     C = keyB[:28]
     D = keyB[28:]
-    while i < 16:
+    while i < 1:
         j = 0
 
         #Realizar corrimiento en divididos
@@ -61,11 +72,9 @@ def keyGenDES(key):
             del D[0]
 
             j += 1
-        #permutacion de pc2 y guardado de cada llave resultante
         keys[i] = permutar(pc2, C + D)
-        keys[i][0] = keys[i][0]
         i += 1
     return keys
 
-#key = 'okijuhyg'
-#keyGenDES(key)
+key = 'okijuhyg'
+keyGenDES(key)
