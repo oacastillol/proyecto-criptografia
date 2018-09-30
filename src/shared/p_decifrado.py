@@ -10,12 +10,12 @@ def gimg1859():
     return lista
 #Transforma en ascii el mensaje o la key y lo delvuelve como lista
 def d_ascii (list1):
-    #print(" c ascii : ", list1)
     lista = []
-    for m in range(len(list1)):
+    rango = len(list1)
+    for m in range(rango):
         vm = ord(list1[m])
         lista += [vm]
-    #print (lista)
+    #print (list1,lista, rango)
     return lista
 
 #Etapa final convertir a a caracter
@@ -26,7 +26,7 @@ def d_caracter (list1):
         vm = str(chr(list1[m]))
         lista += [vm]
     #print (lista)
-    return str(lista)
+    return (lista)
 
 #suma byte por byte
 #utilizado en la etapa inicial y final de nuestro Algoritmo
@@ -34,18 +34,24 @@ def d_caracter (list1):
 def d_resta(list1,list2):
     lista = []
     for m in range(len(list1)):
-        lista.append((list1[m]-list2[m])%256)
+        lista.append(256-((list1[m]-list2[m])%256))
     return lista
 
+def d_restainversa(list1,list2):
+    lista = []
+    for m in range(len(list1)):
+        lista.append(((list1[m]-list2[m])%256))
+    #print(lista,list1,list2)
+    return lista
 # corrimiento a la derecha
 def d_corrimiento (list1):
     lista = []
-    print(list1)
+    #print(list1)
     rango = len(list1)
     for m in range(rango):
         #Corrimiento a la derecha
         lista.append((list1[(m-1)]))
-    print(lista)
+    #print(lista)
     return lista
 #Bloques, etapa intermedia, si es "l" o "r" --corta en la mitad y toma la primera o segunda parte
 def d_bloque(list1,lr):
@@ -76,16 +82,19 @@ def d_unir (list1,list2):
             lista.append(list2[m-rango])
         else:
             print("paso algo inesperado ome")
-        #print('oo : ', lista)
-    #print (lista)
     return lista
 
 def pdecifrado(message, key):
     #print ('mensaje: ',message, " key ",key)
     #Paso a cada letra y numero a ascii
     estatico = gimg1859()
-    list1 = d_ascii(message)
+    #list1 = d_ascii(message)
+    list1 = [35, 8, 24, 13, 181, 189, 160, 160]
+
+
     list2 = d_ascii(key)
+    #[1, 253, 1, 253, 147, 158, 147, 158] mensaje cifrado
+    #clave
     #Etapa inicial del Algoritmo gimg1859
     #print ("Estatico : ", estatico, "list1 ",list1)
     d_1 = d_resta(estatico,list1)
@@ -93,28 +102,31 @@ def pdecifrado(message, key):
     l_0 = d_bloque(d_1,'l')
     r_0 = d_bloque(d_1,'r')
 
-    l_1 = d_corrimiento(r_0)
-    r_1 = d_resta(l_0,list2)
+    r_1 = d_corrimiento(l_0)
+    l_1 = d_restainversa(r_0,list2)
 
-    l_2 = d_corrimiento(r_1)
-    r_2 = d_resta(l_1, list2)
+    l_2 = d_restainversa(r_1, list2)
+    r_2 = d_corrimiento(l_1)
 
-    l_3 = d_corrimiento(r_2)
-    r_3 = d_resta(l_2, list2)
+    l_3 = d_restainversa(r_2, list2)
+    r_3 = d_corrimiento(l_2)
 
-    l_4 = d_corrimiento(r_3)
-    r_4 = d_resta(l_3, list2)
+    l_4 = d_restainversa(r_3, list2)
+    r_4 = d_corrimiento(l_3)
 
-    #Etapa final de cifrado del Algoritmo gimg1859
+    #Etapa final de decifrado del Algoritmo gimg1859
     cunir = d_unir(l_4,r_4)
     d_2 = d_resta(estatico, cunir)
-    c = d_caracter(d_2)
-    return (str(c))
+    d = d_caracter(d_2)
+    #lo muestra lo que vale en ascii
+    print ('decifrado en ascii',d_2)
+    #print('2',l_2,r_2)
+    return (str(d))
 #MAIN
 #tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
 #estatico = list('gimg1859')
-message = list('sehizota')
-key = list ('dddddddd')
+message = list('vanegask')
+key = list ('moralesk')
 #r = 'r'
 #l = 'l'
 #keyGen = keyGenerator(key, 5)
@@ -130,4 +142,8 @@ key = list ('dddddddd')
 #print (" es gimg" ,esta)
 #ant = pdecifrado(message,key)
 #print ('decifrado gimg1859: ' ,ant)
-dcorrimiento = d_corrimiento(message)
+#dcorrimiento = d_corrimiento(message)
+decifrado = pdecifrado(message,key)
+#print('decifrado: ',decifrado)
+dcaracter = d_caracter([1, 253, 1, 253, 147, 158, 147, 158] )
+#print ('mensaje :' ,dcaracter)

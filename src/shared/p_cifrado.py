@@ -38,6 +38,7 @@ def c_suma (list1,list2):
     #print ("lista1: ",list1, " Lista2", list2)
     for m in range(len(list1)):
         lista.append((list1[m]+list2[m])%256)
+        #print(list1,list2,lista,(len(list1)))
     return lista
 
 # corrimiento a la izquierda
@@ -45,7 +46,7 @@ def c_corrimiento (list1):
     lista = []
     rango = int(len(list1))
     m=0
-    print(list1,rango,m)
+    #print(list1,rango,m)
     while m<(rango):
         if m<(rango-1):
             m += 1
@@ -85,12 +86,9 @@ def c_unir (list1,list2):
             lista.append(list2[m-rango])
         else:
             print("paso algo inesperado ome")
-        #print('oo : ', lista)
-    #print (lista)
     return lista
 
 def pcifrado(message, key):
-    #print ('mensaje: ',message, " key ",key)
     #Paso a cada letra y numero a ascii
     estatico = gimg1859()
     list1 = c_ascii(message)
@@ -118,29 +116,18 @@ def pcifrado(message, key):
     cunir = c_unir(l_4,r_4)
     c_2 = c_suma(estatico, cunir)
     c = c_caracter(c_2)
-    #c_2 muestra lo cifrado por bytes
-    #print(c_2)
+    #c_2 muestra lo cifrado en ascii
+    #print('cifrado en ascii: ',c_2)
+    #print (l_4,r_4)
     return c
 #MAIN
 #tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
 #estatico = list('gimg1859')
 #message = list('sehizota')
-message = list('sehi')
-key = list ('dddddddd')
-corimiento = c_corrimiento(message)
-print (corimiento)
-#r = 'r'
-#l = 'l'
+message = list('vanegask')
+key = list ('moralesk')
 #keyGen = keyGenerator(key, 5)
-#nzk = list(c_ascii(estatico))
-#print (nzk)
-#cbloque = c_bloque(nzk,l)
-#cbloque1 = c_bloque(nzk,r)
-#union = c_unir(cbloque,cbloque1)
-#print ('bloque ',cbloque,cbloque1)
-#print ('union ' ,union)
-#print ('---------------')
-#esta = gimg1859()
-#print (" es gimg" ,esta)
-#ant = pcifrado(message,key)
-#print ('cifrado gimg1859: ' ,ant)
+ant = pcifrado(message,key)
+casii = c_ascii(message)
+casiii = c_ascii(key)
+#print ('cifrado gimg1859: ' ,ant, 'mensaje ',message, 'en asci',casii, ' key', key,'en asci',casiii)
