@@ -98,7 +98,6 @@ ipInv = [
 	]
 
 
-
 #Genera el string de bits haciendo primero la conversion de string a hex y luego de hex a bits
 #IN -> text: string a ser transformado
 #IN -> encoding: Necesario para encode de string, encargado de reconocimiento de caracteres
@@ -109,14 +108,16 @@ def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
     bitsres = bits.zfill(8 * ((len(bits) + 7) // 8))
     return bitsres
 
-#funciones para retornar el string teniendo en base bits
-def text_from_bits(bits):
-	n = int(bits,2)
-	print("n",n)
-	print( binascii.unhexlify('%x' % n))
-	return binascii.unhexlify('%x' % n)
 
+#Etapa final convertir a a caracter
+def d_caracter (list1):
 
+    lista = []
+    for m in range(len(list1)):
+        vm = str(chr(list1[m]))
+        lista += [vm]
+    #print (lista)
+    return (lista)
 
 
 #Realiza la permutacion del bloque entrante con la tabla correspondiente, usando un mapeo de funcion lambda
@@ -127,10 +128,7 @@ def permutar(tabla, bloque):
 		return list(map(lambda x: bloque[x], tabla))
 
 
-
-
-
-#Funcion de cifrado/desifrado, en ella se calculan las llaves a usar para la k asignada por el usuario, y el mensaje resultante
+#Funcion de cifrado/desifrado, en ella se calculan las llaves a usar para la k y el mensaje resultante
 
 def cipher(msg,key,type):
 
@@ -148,13 +146,15 @@ def cipher(msg,key,type):
 	L = mB[:32]
 	R = mB[32:]
 
-	if type == "chiper":
-		#iniciacion de iteracion para uso de llaves con su offsite
+	if type == "cipher":
+		#iniciacion de iteracion para uso de llaves con su offsite cifrado
 		it = 0
 		itoff = 1
 	else:
+		#iniciacion de iteracion para uso de llaves con su offsite descifrado
 		it = 15
 		itoff = -1
+
 	i = 0
 	while i< 16:
 		#temporal para ser reemplazado en proxima iteracion
@@ -218,21 +218,51 @@ def cipher(msg,key,type):
 	#permutacion de ultimo paso entre bits completos y el ipInv
 	fStep = permutar(ipInv, R + L)
 
-	print("final", fStep)
 
-
-	#FALTA PASO DE BITS A MENSAJE
+	#Paso de bits a mensaje, primero pasandolo a Codigo ascii y finalmente a carcateres
 	temp = ''.join(map(str,fStep))
 	temp2 = '0b'
-	print("split",temp2.split())
-	temp = temp2 + temp
-	print("tempo",temp)
-	result = text_from_bits(temp)
-	print(result)
+	bits = temp2 + temp
+	#Paso a codigo ascii
+	n = int(bits,2)
+	hexar = binascii.unhexlify('%x' % n)
+	#Paso a caracteres
+	result = d_caracter(hexar)
+	#print("final result", ''.join(map(str,result)))
+
 	return result
+
+#Funcion MAIN de algoritmo DES
+#IN -> msg: mensaje completo en string a cifrar
+#IN -> key: llave en string a ser usada
+#IN -> type: tipo de cifrado, 'cipher' para cifrado, el resto es descifrado
+def DES(msg,key,type):
+	#verifica si la llave es de 8 caracteres
+	if len(key)!=8:
+		raise Exception("Llave de tamaño incorrecto")
+		return -1
+
+	#inicializacion de string respuesta y temporal para espacio de 8 caracteres por cifrado
+	c = ""
+	temp = ""
+
+	#division del mensaje en espacios de 8 caracteres, guardado de respectivos cifrados
+	while len(msg) > 7:
+		temp = msg[:8]
+		res = cipher(temp,key,type)
+		c += ''.join(map(str,res))
+		msg = msg[8:]
+	#si el mensaje no es multiplo de 8 rellena con x al final y ejecuta ultima iteracion de msg para encontrar cifrado
+	if len(msg) > 0:
+		while len(msg) <8:
+			msg = msg + 'x'
+		res = cipher(msg,key,type)
+		c += ''.join(map(str,res))
+	#print("cipher", c)
+	return c
 
 
 # MAIN
-msg = "testting"
-key = "testing2"
-cipher(msg,key,"chiper")
+#msg = "prueba01"
+#key = "llave001"
+#DES(msg,key,"cipher")
