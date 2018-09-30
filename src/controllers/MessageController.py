@@ -32,6 +32,7 @@ def get_all():
   return custom_response(data, 200)
 
 @message_api.route('/<int:message_id>', methods=['GET'])
+@Auth.auth_required
 def get_one(message_id):
   """
   Get A Message

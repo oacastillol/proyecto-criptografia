@@ -13,7 +13,9 @@ def create():
   req_data = request.get_json()
   data, error = user_schema.load(req_data)
   if error:
-    return custom_response(error, 400)  
+    return custom_response(error, 400)
+  if not data.get('username') or not data.get('password'):
+    return custom_response({'error': 'Necesitas un usuario y una contraseña para registrarte'}, 400)
   # check if user already exist in the db
   user_in_db = UserModel.get_user_by_username(data.get('username'))
   if user_in_db:
@@ -39,7 +41,7 @@ def login():
     if error:
         return custom_response(error, 400)
     if not data.get('username') or not data.get('password'):
-        return custom_response({'error': 'Necesitas un correo electrónico y una contraseña para iniciar sesión'}, 400)
+        return custom_response({'error': 'Necesitas un usuario y una contraseña para iniciar sesión'}, 400)
     user = UserModel.get_user_by_username(data.get('username'))
     if not user:
         return custom_response({'error': 'credenciales no validas'}, 400)

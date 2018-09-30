@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 {% block html_attribs %} lang="es"{% endblock %}
-{% block title %}cipher Team D{% endblock %}
+{% block title %}Kodilo{% endblock %}
 
 {% block navbar %}
 <nav class="navbar navbar-default">
@@ -13,18 +13,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+      <a class="navbar-brand" href="#">Kodilo</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"> <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myLogin">Ingresar</button>
-
+	<li id="liPerfil"> <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myPerfil" id="perfilBtn">Perfil</button>
 	
-        <li><button type="button" class="btn btn-link" id="messages">Mensajes</button></li>
+        <li id="liMensajes"><button type="button" class="btn btn-link" id="messages">Mensajes</button></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-	<li><button type="button" class="btn btn-link" id="logout">Salir</button></li>
+	<li id="liLogin"> <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myLogin">Ingresar</button>
+	<li id="liLogout"><button type="button" class="btn btn-link" id="logout">Salir</button></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
