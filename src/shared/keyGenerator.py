@@ -28,7 +28,7 @@ def swap(actKey, swapKey):
 	return newKey
 
 
-# Genera las lalves de cada iteración
+# Genera las llaves de cada iteración
 # IN -> key: llave ingresada por el usuario
 # IN -> it: cantidad de iteraciones, keys a generar.
 # OUT -> keys: lista de keys.
