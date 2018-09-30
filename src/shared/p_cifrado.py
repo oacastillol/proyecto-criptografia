@@ -117,8 +117,7 @@ def pcifrado(message, key):
     c_2 = c_suma(estatico, cunir)
     c = c_caracter(c_2)
     #c_2 muestra lo cifrado en ascii
-    #print('cifrado en ascii: ',c_2)
-    #print (l_4,r_4)
+    print('cifrado gimg1859 en ascii: ',c_2)
     return c
 #MAIN
 #tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
@@ -130,4 +129,4 @@ key = list ('moralesk')
 ant = pcifrado(message,key)
 casii = c_ascii(message)
 casiii = c_ascii(key)
-#print ('cifrado gimg1859: ' ,ant, 'mensaje ',message, 'en asci',casii, ' key', key,'en asci',casiii)
+print ('cifrado gimg1859: ' , 'mensaje ',message, 'en asci',casii, ' key', key,'en asci',casiii)
