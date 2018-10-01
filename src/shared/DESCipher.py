@@ -97,27 +97,44 @@ ipInv = [
 		32,  0, 40,  8, 48, 16, 56, 24
 	]
 
+#Funcion de paso de String a bits
+#IN -> data: string a ser transformado a bits
+#OUT -> result: lista de valores  de los datos ingresados, con espacios l definido por el largo del data
+def bitsDeString(datos):
+	#ord recibe cada uno de los string de data y lo convierte a unicode
+	datos = [ord(x) for x in datos]
+	l = len(datos) * 8
+	result = [0] * l
+	pos = 0
+	for x in datos:
+		i = 7
+		while i >= 0:
+			#por cada unicode de datos verifica si el AND de tamaño y posicion es = 0 y asigna el valor correspondiente
+			if x & (1 << i) != 0:
+				result[pos] = 1
+			else:
+				result[pos] = 0
+			pos += 1
+			i -= 1
+	return result
 
-#Genera el string de bits haciendo primero la conversion de string a hex y luego de hex a bits
-#IN -> text: string a ser transformado
-#IN -> encoding: Necesario para encode de string, encargado de reconocimiento de caracteres
-#IN -> errors: Necesario para encode, define si muestra o no errores o adverencias, definido como no mostrar.
-#OUT -> bitsres: resultado de correccion de bits con veros a la izquierda, para completar los 64bits
-def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
-    bits = bin(int(binascii.hexlify(text.encode(encoding, errors)), 16))[2:]
-    bitsres = bits.zfill(8 * ((len(bits) + 7) // 8))
-    return bitsres
-
-
-#Etapa final convertir a a caracter
-def d_caracter (list1):
-
-    lista = []
-    for m in range(len(list1)):
-        vm = str(chr(list1[m]))
-        lista += [vm]
-    #print (lista)
-    return (lista)
+#fucion de paso de bits a String
+#IN -> data: lista de bits a ser transformado
+#OUT - > string de datos en forma unicode para ser mostrado
+def stringDeBits(datos):
+	#print(datos)
+	result = []
+	pos = 0
+	c = 0
+	while pos < len(datos):
+		#corrimiento de bits para que el string sea conformado como bits y luego con la cantidad suficiente (8) se agrega a resultado
+		c += datos[pos] << (7 - (pos % 8))
+		if (pos % 8) == 7:
+			result.append(c)
+			c = 0
+		pos += 1
+	#chr retorna el valor unicodigo de cada x en resultado
+	return ''.join([ chr(x) for x in result ])
 
 
 #Realiza la permutacion del bloque entrante con la tabla correspondiente, usando un mapeo de funcion lambda
@@ -129,23 +146,25 @@ def permutar(tabla, bloque):
 
 
 #Funcion de cifrado/desifrado, en ella se calculan las llaves a usar para la k y el mensaje resultante
-
+#IN -> msg: texto de 8 caracteres a ser tratado
+#IN -> key: llave definida por el usuario y tratada por el sistema
+#IN-> type: tipo de metodo (cifrado o descifrado) si es 'cipher' es cifrado, de otra forma es descifrado
+#OUT -> result: resultado de manejo del mensaje con llave dada y tipo ingresado
 def cipher(msg,key,type):
-
-#tratado de la llave y posterior generacion de llaves
-	keyB = text_to_bits(key)
-	keyB = [keyB[i:i+1] for i in range(0, len(keyB), 1)]
+	#tratado de la llave y posterior generacion de llaves
+	keyB = bitsDeString(key)
 	keyGen = keyGenDES(keyB)
-#tratado del mensaje para algoritmo, resultado en bits de la primera permutacion IP
-	mB = text_to_bits(msg)
-	mB = [keyB[i:i+1] for i in range(0, len(mB), 1)]
+
+	#tratado del mensaje para algoritmo, resultado en bits de la primera permutacion IP
+	mB = bitsDeString(msg)
 	mB = permutar(ip, mB)
 
 
-#division de mensaje luego de permutacion
+	#division de mensaje luego de permutacion
 	L = mB[:32]
 	R = mB[32:]
 
+	#verificacion de proceso cifrado/descifrado (diferencia entre corrimiento de llaves usadas)
 	if type == "cipher":
 		#iniciacion de iteracion para uso de llaves con su offsite cifrado
 		it = 0
@@ -155,6 +174,7 @@ def cipher(msg,key,type):
 		it = 15
 		itoff = -1
 
+	#inicio de los 16 ciclos
 	i = 0
 	while i< 16:
 		#temporal para ser reemplazado en proxima iteracion
@@ -219,23 +239,16 @@ def cipher(msg,key,type):
 	fStep = permutar(ipInv, R + L)
 
 
-	#Paso de bits a mensaje, primero pasandolo a Codigo ascii y finalmente a carcateres
-	temp = ''.join(map(str,fStep))
-	temp2 = '0b'
-	bits = temp2 + temp
-	#Paso a codigo ascii
-	n = int(bits,2)
-	hexar = binascii.unhexlify('%x' % n)
-	#Paso a caracteres
-	result = d_caracter(hexar)
-	#print("final result", ''.join(map(str,result)))
-
+	#Paso de bits a mensaje
+	result = stringDeBits(fStep)
+	#print(result)
 	return result
 
 #Funcion MAIN de algoritmo DES
 #IN -> msg: mensaje completo en string a cifrar
 #IN -> key: llave en string a ser usada
 #IN -> type: tipo de cifrado, 'cipher' para cifrado, el resto es descifrado
+#OUT -> c: string unificado de particiones tratadas del mensaje, resultado de mensaje cifrado o descifrado
 def DES(msg,key,type):
 	#verifica si la llave es de 8 caracteres
 	if len(key)<8:
@@ -265,6 +278,8 @@ def DES(msg,key,type):
 
 
 # MAIN
-msg = "prueba01"
-key = "llave065"
-DES(msg,key,"cipher")
+#msg = "prueba"
+#key = "llave065"
+#c = DES(msg,key,"cipher")
+#DES(c,key,"")
+
