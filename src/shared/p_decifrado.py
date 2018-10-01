@@ -125,8 +125,8 @@ def pdecifrado(message, key):
 #MAIN
 #tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
 #estatico = list('gimg1859')
-message = list('vanegask')
-key = list ('moralesk')
+#message = list('vanegask')
+#key = list ('moralesk')
 #r = 'r'
 #l = 'l'
 #keyGen = keyGenerator(key, 5)
@@ -143,7 +143,7 @@ key = list ('moralesk')
 #ant = pdecifrado(message,key)
 #print ('decifrado gimg1859: ' ,ant)
 #dcorrimiento = d_corrimiento(message)
-decifrado = pdecifrado(message,key)
+#decifrado = pdecifrado(message,key)
 #print('decifrado: ',decifrado)
-dcaracter = d_caracter([1, 253, 1, 253, 147, 158, 147, 158] )
+#dcaracter = d_caracter([1, 253, 1, 253, 147, 158, 147, 158] )
 #print ('mensaje :' ,dcaracter)

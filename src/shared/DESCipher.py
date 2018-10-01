@@ -1,5 +1,5 @@
 import binascii
-from keyGenDES import keyGenDES # Modulo encargado de generar las llaves, tomando como partida la llave dada por el usuario.
+from .keyGenDES import keyGenDES # Modulo encargado de generar las llaves, tomando como partida la llave dada por el usuario.
 
 #tabla de permutacion para mensaje original
 ip = [57, 49, 41, 33, 25, 17, 9,  1,

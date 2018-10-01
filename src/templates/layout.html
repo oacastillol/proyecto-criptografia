@@ -1,7 +1,10 @@
 {% extends "bootstrap/base.html" %}
 {% block html_attribs %} lang="es"{% endblock %}
 {% block title %}Kodilo{% endblock %}
-
+{% block head%}
+{{super()}}
+ <meta charset="UTF-8"> 
+{% endblock%}
 {% block navbar %}
 <nav class="navbar navbar-default">
   <div class="container-fluid">

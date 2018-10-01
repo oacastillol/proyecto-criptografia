@@ -96,9 +96,19 @@ function loadMessages(){
 	    });
     }
 };
+function translate(codes){
+    codes.forEach(function(e){
+	console.log(String.fromCharCode(e));
+    });    
+    return String.fromCharCode(codes);
+};
+function clearMessage(){
+    $('#messageOut').html('');
+}
 function addFunctions(){
     $('#cifrar').click(
 	function(){
+	    clearMessage();
 	    let textIn = $('#messageIn').val();
 	    let type = $('#typeCipher').val();
 	    let key = $('#key').val();
@@ -113,7 +123,7 @@ function addFunctions(){
 		url: "/api/v1/cipher/encode",
 	    })
 		.done(function( data ) {
-		    $('#messageOut').val(data.message);
+		    $('#messageOut').append(`<p>`+data.message+`</p>`);
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 		    if(typeof jqXHR.responseJSON !== 'undefined' ){
@@ -125,6 +135,7 @@ function addFunctions(){
 	});
     $('#descifrar').click(
 	function(){
+	    clearMessage();
 	    let textIn = $('#messageIn').val();
 	    let type = $('#typeCipher').val();
 	    let key = $('#key').val();
@@ -139,7 +150,7 @@ function addFunctions(){
 		url: "/api/v1/cipher/decode",
 	    })
 		.done(function( data ) {
-		    $('#messageOut').val(data.message);
+		    $('#messageOut').append(`<p>`+data.message+`</p>`);
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 		    if(typeof jqXHR.responseJSON !== 'undefined' ){
@@ -189,7 +200,7 @@ function addFunctions(){
 	    data:dataFill, 
 	    type: 'POST',
 	    dataType: "json",
-	    contentType: "application/json; charset=utf-8",
+	    contentType: "application/json",
 	    url: "/api/v1/users/",
 	})
 	    .done(function( data ) {
@@ -213,7 +224,7 @@ function addFunctions(){
     $('#guardar').click(function(event){
 	event.preventDefault();
 	if (localStorage.getItem("token-user")  !== null){
-	    let cipher = $('#messageOut').val();
+	    let cipher = $('#messageOut').text();
 	    let title = $('#titleMessage').val();
 	    let dataFill = JSON.stringify({"title":title,
 					   "cipher":cipher
@@ -241,9 +252,9 @@ function addFunctions(){
 			showError("Lo sentimos no sabemos que ocurrio..."+textStatus+" "+errorThrown);
 		    }
 		});
-    }
-			return true;
-		       });
+	}
+	return true;
+    });
     $('#perfilBtn').click(function(){
 	if (localStorage.getItem("token-user")  !== null){
 	    let headersFill= {"api-token":localStorage.getItem("token-user")};
@@ -265,7 +276,7 @@ function addFunctions(){
 		    }
 		});
 	}
-});
+    });
     $("#savePerfil").click(function(){
 	let user=$('#usernamePerfil').val();
 	let pass=$('#passwordPerfil').val();
@@ -281,21 +292,21 @@ function addFunctions(){
 	    contentType: "application/json; charset=utf-8",
 	    url: "/api/v1/users/me",
 	})
-	.done(function( data ) {
-	    $('#myPerfil').modal('toggle');
-	    $('body').removeClass('modal-open');
-	    $('.modal-backdrop').remove();
-	    init();
-	})
-	.fail(function( jqXHR, textStatus, errorThrown ) {
-	    if(typeof jqXHR.responseJSON !== 'undefined' ){
-		showError(jqXHR.responseJSON.error,"myPerfil");
-	    }else{
-		showError("Lo sentimos no sabemos que ocurrio..."+textStatus+" "+errorThrown,"myPerfil");
-	    }		
-	});
-});
-    $(borrarMsj).click(function(){
+	    .done(function( data ) {
+		$('#myPerfil').modal('toggle');
+		$('body').removeClass('modal-open');
+		$('.modal-backdrop').remove();
+		init();
+	    })
+	    .fail(function( jqXHR, textStatus, errorThrown ) {
+		if(typeof jqXHR.responseJSON !== 'undefined' ){
+		    showError(jqXHR.responseJSON.error,"myPerfil");
+		}else{
+		    showError("Lo sentimos no sabemos que ocurrio..."+textStatus+" "+errorThrown,"myPerfil");
+		}		
+	    });
+    });
+    $("#borrarMsj").click(function(){
 	let msj = $('input[name=msjId]:checked').val();
 	let urlM = "/api/v1/messages/"+msj;
 	let headersFill= {"api-token":localStorage.getItem("token-user")};
@@ -305,9 +316,9 @@ function addFunctions(){
 	    dataType: "json",
 	    url: urlM,
 	})
-		.done(function( data ) {
-		    loadMessages();
-		})
+	    .done(function( data ) {
+		loadMessages();
+	    })
 	    .fail(function( jqXHR, textStatus, errorThrown ) {
 		if(typeof jqXHR.responseJSON !== 'undefined' ){
 		    showError(jqXHR.responseJSON.error,"myPerfil");
@@ -315,7 +326,7 @@ function addFunctions(){
 		    showError("Lo sentimos no sabemos que ocurrio..."+textStatus+" "+errorThrown,"myMessage");
 		}		
 	    });
-	});
+    });
     $("#cargarMsj").click(function(){
 	let msj = $('input[name=msjId]:checked').val();
 	let urlM = "/api/v1/messages/"+msj;
@@ -330,7 +341,8 @@ function addFunctions(){
 		$('#myMessage').modal('hide');
 		$('body').removeClass('modal-open');
 		$('.modal-backdrop').remove();
-		$('#messageOut').val(data.cipher);
+		clearMessage();
+		$('#messageOut').append(`<p>`+data.cipher+`</p>`);
 		$('#titleMessage').val(data.title);
 	    })
 	    .fail(function( jqXHR, textStatus, errorThrown ) {
@@ -345,4 +357,4 @@ function addFunctions(){
 	localStorage.removeItem("token-user");
 	init();
     });
-    };
+};
