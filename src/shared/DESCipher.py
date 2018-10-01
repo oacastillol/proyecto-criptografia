@@ -238,9 +238,11 @@ def cipher(msg,key,type):
 #IN -> type: tipo de cifrado, 'cipher' para cifrado, el resto es descifrado
 def DES(msg,key,type):
 	#verifica si la llave es de 8 caracteres
-	if len(key)!=8:
-		raise Exception("Llave de tamaño incorrecto")
-		return -1
+	if len(key)<8:
+		while len(key)<8:
+			key = key + 'x'
+	else:
+		key = key[:8]
 
 	#inicializacion de string respuesta y temporal para espacio de 8 caracteres por cifrado
 	c = ""
@@ -263,6 +265,6 @@ def DES(msg,key,type):
 
 
 # MAIN
-#msg = "prueba01"
-#key = "llave001"
-#DES(msg,key,"cipher")
+msg = "prueba01"
+key = "llave065"
+DES(msg,key,"cipher")
