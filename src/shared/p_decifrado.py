@@ -1,3 +1,4 @@
+from keyGenerator import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
 #NOTA: puede funcionar con 4 6 8 bytes o demas, tener cuidad con message y key
 #El dogma del Algoritmo propio, asi igualmente se le llamara
 def gimg1859():
@@ -83,67 +84,91 @@ def d_unir (list1,list2):
         else:
             print("paso algo inesperado ome")
     return lista
+def d_relleno(list1):
+    lista = []
+    rango = len(list1)
+    if rango >8:
+        for m in range (8):
+            lista.append(list1[m])
 
-def pdecifrado(message, key):
-    #print ('mensaje: ',message, " key ",key)
-    #Paso a cada letra y numero a ascii
+    elif rango ==8:
+        return list1
+    elif rango < 8:
+        for m in range (rango):
+            lista.append(list1[m])
+        for m in range (8-rango):
+            if m ==1:
+                m = rango
+            lista.append(1)
+
+    else:
+        print ("tamano lista error menor que cero WDF!")
+    #print ('relleno',lista)
+    return lista
+def p_mensaje(list1):
+    atexto = ''.join(list1)
+    return atexto
+def p_decifrado(message, key,c_rango):
+    lista = []
+        #Paso a cada letra y numero a ascii
     estatico = gimg1859()
-    #list1 = d_ascii(message)
-    list1 = [35, 8, 24, 13, 181, 189, 160, 160]
+    rango_m = len(message)
+    rango_k = len(key)
+    rango  = 0
+    while rango <= rango_m:
+        #Arreglando bug del indexado
+        if rango == rango_m:
+            break
+        list1 = []
+        #envia a list1 lo comprendido de lista_m ASCII para esta iteracion
 
+        for m in range (8):
+            if (m+rango) >= rango_m:
 
-    list2 = d_ascii(key)
-    #[1, 253, 1, 253, 147, 158, 147, 158] mensaje cifrado
-    #clave
-    #Etapa inicial del Algoritmo gimg1859
-    #print ("Estatico : ", estatico, "list1 ",list1)
-    d_1 = d_resta(estatico,list1)
-    #Estapa intermedia - podria usar un def mas pero mientras tanto asi
-    l_0 = d_bloque(d_1,'l')
-    r_0 = d_bloque(d_1,'r')
+                list1 = c_relleno(list1)
+                m = 8
+            elif rango <= rango_m:
+                list1.append(message[m+rango])
+            else:
+                print ('error en rango de mensaje')
 
-    r_1 = d_corrimiento(l_0)
-    l_1 = d_restainversa(r_0,list2)
+        #En dado caso que la key tenga mas de 8 bytes solo toma encuenta los primeros 8
+        list2 = d_relleno(d_ascii(key))
+        #[1, 253, 1, 253, 147, 158, 147, 158] mensaje cifrado
+        #clave
+        #Etapa inicial del Algoritmo gimg1859
 
-    l_2 = d_restainversa(r_1, list2)
-    r_2 = d_corrimiento(l_1)
+        d_1 = d_resta(estatico,list1)
+        #Estapa intermedia - podria usar un def mas pero mientras tanto asi
+        l_0 = d_bloque(d_1,'l')
+        r_0 = d_bloque(d_1,'r')
 
-    l_3 = d_restainversa(r_2, list2)
-    r_3 = d_corrimiento(l_2)
+        r_1 = d_corrimiento(l_0)
 
-    l_4 = d_restainversa(r_3, list2)
-    r_4 = d_corrimiento(l_3)
+        l_1 = d_restainversa(r_0,list2)
 
-    #Etapa final de decifrado del Algoritmo gimg1859
-    cunir = d_unir(l_4,r_4)
-    d_2 = d_resta(estatico, cunir)
-    d = d_caracter(d_2)
-    #lo muestra lo que vale en ascii
-    print ('decifrado en ascii',d_2)
-    #print('2',l_2,r_2)
-    return (str(d))
-#MAIN
-#tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
-#estatico = list('gimg1859')
-#message = list('vanegask')
-#key = list ('moralesk')
-#r = 'r'
-#l = 'l'
-#keyGen = keyGenerator(key, 5)
-#nzk = list(d_ascii(key))
-#print (nzk)
-#cbloque = d_bloque(nzk,l)
-#cbloque1 = d_bloque(nzk,r)
-#union = d_unir(cbloque,cbloque1)
-#print ('bloque ',cbloque,cbloque1)
-#print ('union ' ,union)
-#print ('---------------')
-#esta = gimg1859()
-#print (" es gimg" ,esta)
-#ant = pdecifrado(message,key)
-#print ('decifrado gimg1859: ' ,ant)
-#dcorrimiento = d_corrimiento(message)
-#decifrado = pdecifrado(message,key)
-#print('decifrado: ',decifrado)
-#dcaracter = d_caracter([1, 253, 1, 253, 147, 158, 147, 158] )
-#print ('mensaje :' ,dcaracter)
+        l_2 = d_restainversa(r_1, list2)
+        r_2 = d_corrimiento(l_1)
+
+        l_3 = d_restainversa(r_2, list2)
+        r_3 = d_corrimiento(l_2)
+
+        l_4 = d_restainversa(r_3, list2)
+        r_4 = d_corrimiento(l_3)
+
+        #Etapa final de decifrado del Algoritmo gimg1859
+        cunir = d_unir(l_4,r_4)
+        d_2 = d_resta(estatico, cunir)
+        #d = d_caracter(d_2)
+        #lo muestra lo que vale en ascii
+        #print ('decifrado en ascii',d_2)
+        lista+=d_2
+        rango+=8
+        #Eliminar caracteres de relleno
+        if rango>c_rango:
+            eliminar = int(rango - c_rango)
+            for k in range (eliminar):
+                lista.pop()
+
+    return (lista)
+

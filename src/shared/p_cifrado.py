@@ -1,3 +1,4 @@
+from keyGenerator import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
 #NOTA: puede funcionar con 4 6 8 bytes o demas, tener cuidad con message y key
 #El dogma del Algoritmo propio, asi igualmente se le llamara
 def gimg1859():
@@ -87,46 +88,80 @@ def c_unir (list1,list2):
         else:
             print("paso algo inesperado ome")
     return lista
+#Rellena si es menor a 8 bytes con null en ASCII
+def c_relleno(list1):
+    lista = []
+    rango = len(list1)
+    if rango >8:
+        for m in range (8):
+            lista.append(list1[m])
+    elif rango ==8:
+        return list1
+    elif rango < 8:
+        for m in range (rango):
+            lista.append(list1[m])
+        for m in range (8-rango):
+            if m ==1:
+                m = rango
+            lista.append(1)
 
-def pcifrado(message, key):
-    #Paso a cada letra y numero a ascii
+    else:
+        print ("tamano lista error menor que cero WDF!")
+    #print ('relleno',lista)
+    return lista
+
+def p_cifrado(message, key):
+    lista = []
+        #Paso a cada letra y numero a ascii
     estatico = gimg1859()
-    list1 = c_ascii(message)
-    list2 = c_ascii(key)
-    #Etapa inicial del Algoritmo gimg1859
-    #print ("Estatico : ", estatico, "list1 ",list1)
-    c_1 = c_suma(estatico,list1)
-    #Estapa intermedia - podria usar un def mas pero mientras tanto asi
-    l_0 = c_bloque(c_1,'l')
-    r_0 = c_bloque(c_1,'r')
+    rango_m = len(message)
+    rango_k = len(key)
+    lista_m = c_ascii(message)
+    rango  = 0
+    while rango <= rango_m:
+        #Arreglando bug del indexado
+        if rango == rango_m:
+            break
+        list1 = []
+        #envia a list1 lo comprendido de lista_m ASCII para esta iteracion
 
-    l_1 = c_corrimiento(r_0)
-    r_1 = c_suma(l_0,list2)
+        for m in range (8):
+            if (m+rango) >= rango_m:
 
-    l_2 = c_corrimiento(r_1)
-    r_2 = c_suma(l_1, list2)
+                list1 = c_relleno(list1)
+                m = 8
+            elif rango <= rango_m:
+                list1.append(lista_m[m+rango])
+            else:
+                print ('error en rango de mensaje')
+            #print ('lis1: ',list1, 'lista_m: ',lista_m, "rango&m",(rango+m), 'rango: ',rango, 'm: ',m)
+        #En dado caso que la key tenga mas de 8 bytes solo toma encuenta los primeros 8
+        list2 = c_relleno(c_ascii(key))
+        #Etapa inicial del Algoritmo gimg1859
+        c_1 = c_suma(estatico,list1)
+        #Estapa intermedia - podria usar un def mas pero mientras tanto asi
+        l_0 = c_bloque(c_1,'l')
+        r_0 = c_bloque(c_1,'r')
 
-    l_3 = c_corrimiento(r_2)
-    r_3 = c_suma(l_2, list2)
+        l_1 = c_corrimiento(r_0)
+        r_1 = c_suma(l_0,list2)
 
-    l_4 = c_corrimiento(r_3)
-    r_4 = c_suma(l_3, list2)
+        l_2 = c_corrimiento(r_1)
+        r_2 = c_suma(l_1, list2)
 
-    #Etapa final de cifrado del Algoritmo gimg1859
-    cunir = c_unir(l_4,r_4)
-    c_2 = c_suma(estatico, cunir)
-    c = c_caracter(c_2)
-    #c_2 muestra lo cifrado en ascii
-    print('cifrado gimg1859 en ascii: ',c_2)
-    return c
-#MAIN
-#tupla inmutable [103, 105, 109, 103, 49, 56, 53, 57]
-#estatico = list('gimg1859')
-#message = list('sehizota')
-#message = list('vanegask')
-#key = list ('moralesk')
-#keyGen = keyGenerator(key, 5)
-#ant = pcifrado(message,key)
-#casii = c_ascii(message)
-#casiii = c_ascii(key)
-#print ('cifrado gimg1859: ' , 'mensaje ',message, 'en asci',casii, ' key', key,'en asci',casiii)
+        l_3 = c_corrimiento(r_2)
+        r_3 = c_suma(l_2, list2)
+
+        l_4 = c_corrimiento(r_3)
+        r_4 = c_suma(l_3, list2)
+
+        #Etapa final de cifrado del Algoritmo gimg1859
+        cunir = c_unir(l_4,r_4)
+        c_2 = c_suma(estatico, cunir)
+        #c = c_caracter(c_2)
+        #c_2 muestra lo cifrado en ascii
+        #print('cifrado gimg1859 en ascii: ',c_2)
+        rango+=8
+        lista+=c_2
+        #print ('lista: ', lista, 'list1: ', list1, 'rango: ', rango, ' rango_m:',rango_m, (len(lista)))
+    return lista, rango_m
