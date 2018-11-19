@@ -1,4 +1,4 @@
-from keyGenerator import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
+from .keyGenerator import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
 #NOTA: puede funcionar con 4 6 8 bytes o demas, tener cuidad con message y key
 #El dogma del Algoritmo propio, asi igualmente se le llamara
 def gimg1859():
@@ -7,7 +7,7 @@ def gimg1859():
     for m in range(len(list1)):
         vm = ord(list1[m])
         lista += [vm]
-    #print (lista)
+    print (lista)
     return lista
 #Transforma en ascii el mensaje o la key y lo delvuelve como lista
 def c_ascii (list1):
@@ -90,6 +90,7 @@ def c_unir (list1,list2):
     return lista
 #Rellena si es menor a 8 bytes con null en ASCII
 def c_relleno(list1):
+    #print(list1)
     lista = []
     rango = len(list1)
     if rango >8:
@@ -110,13 +111,13 @@ def c_relleno(list1):
     #print ('relleno',lista)
     return lista
 
-def p_cifrado(message, key):
+def pcifrado(lista_m, key):
     lista = []
         #Paso a cada letra y numero a ascii
     estatico = gimg1859()
-    rango_m = len(message)
+    rango_m = len(lista_m)
     rango_k = len(key)
-    lista_m = c_ascii(message)
+#     = c_ascii(message)
     rango  = 0
     while rango <= rango_m:
         #Arreglando bug del indexado
@@ -134,9 +135,9 @@ def p_cifrado(message, key):
                 list1.append(lista_m[m+rango])
             else:
                 print ('error en rango de mensaje')
-            #print ('lis1: ',list1, 'lista_m: ',lista_m, "rango&m",(rango+m), 'rango: ',rango, 'm: ',m)
+        #    print ('lis1: ',list1, 'lista_m: ',lista_m, "rango&m",(rango+m), 'rango: ',rango, 'm: ',m)
         #En dado caso que la key tenga mas de 8 bytes solo toma encuenta los primeros 8
-        list2 = c_relleno(c_ascii(key))
+        list2 = c_relleno(key)
         #Etapa inicial del Algoritmo gimg1859
         c_1 = c_suma(estatico,list1)
         #Estapa intermedia - podria usar un def mas pero mientras tanto asi
@@ -164,4 +165,4 @@ def p_cifrado(message, key):
         rango+=8
         lista+=c_2
         #print ('lista: ', lista, 'list1: ', list1, 'rango: ', rango, ' rango_m:',rango_m, (len(lista)))
-    return lista, rango_m
+    return lista #, rango_m

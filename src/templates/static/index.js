@@ -60,6 +60,26 @@ function clearErrors(){
     $('#errorAlertmyPerfil').hide();
     $('#messageErrormyPerfil').html('');
 };
+function toASCIICode(letter){
+    return letter.charCodeAt(0);
+}
+function toLetter(code){
+    return String.fromCharCode(code);
+}
+function encodeMessage(word){
+    answer =[];
+    for( i in word){
+	answer.push(toASCIICode(word[i]));
+    }
+    return answer;
+}
+function decodeMessage(inputList){
+    answer='';
+    for(i in inputList){
+	answer = answer+toLetter(inputList[i]);
+    }
+    return answer;
+}
 function loadMessages(){
     if (localStorage.getItem("token-user")  !== null){
 	let headersFill= {"api-token":localStorage.getItem("token-user")};
@@ -82,7 +102,7 @@ function loadMessages(){
 					<input type="radio" name="msjId" value="`+e.id+`">  `+e.title+`</label>
 							   </div>
 			    </td>
-			    <td>`+e.cipher+`</td>
+			    <td>`+decodeMessage(e.cipher)+`</td>
 							   </tr>`);
 		    });
 		$("#myMessage").modal();
@@ -96,12 +116,6 @@ function loadMessages(){
 	    });
     }
 };
-function translate(codes){
-    codes.forEach(function(e){
-	console.log(String.fromCharCode(e));
-    });    
-    return String.fromCharCode(codes);
-};
 function clearMessage(){
     $('#messageOut').html('');
 }
@@ -109,9 +123,9 @@ function addFunctions(){
     $('#cifrar').click(
 	function(){
 	    clearMessage();
-	    let textIn = $('#messageIn').val();
+	    let textIn = encodeMessage($('#messageIn').val());
 	    let type = $('#typeCipher').val();
-	    let key = $('#key').val();
+	    let key = encodeMessage($('#key').val());
 	    $.ajax({
 		data:JSON.stringify({"message":textIn,
 				     "type":type,
@@ -123,7 +137,7 @@ function addFunctions(){
 		url: "/api/v1/cipher/encode",
 	    })
 		.done(function( data ) {
-		    $('#messageOut').append(`<p>`+data.message+`</p>`);
+		    $('#messageOut').append(`<p>`+decodeMessage(data.message)+`</p>`);
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 		    if(typeof jqXHR.responseJSON !== 'undefined' ){
@@ -136,9 +150,9 @@ function addFunctions(){
     $('#descifrar').click(
 	function(){
 	    clearMessage();
-	    let textIn = $('#messageIn').val();
+	    let textIn = encodeMessage($('#messageIn').val());
 	    let type = $('#typeCipher').val();
-	    let key = $('#key').val();
+	    let key = encodeMessage($('#key').val());
 	    $.ajax({
 		data:JSON.stringify({"message":textIn,
 				     "type":type,
@@ -150,7 +164,7 @@ function addFunctions(){
 		url: "/api/v1/cipher/decode",
 	    })
 		.done(function( data ) {
-		    $('#messageOut').append(`<p>`+data.message+`</p>`);
+		    $('#messageOut').append(`<p>`+decodeMessage(data.message)+`</p>`);
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 		    if(typeof jqXHR.responseJSON !== 'undefined' ){
@@ -224,7 +238,7 @@ function addFunctions(){
     $('#guardar').click(function(event){
 	event.preventDefault();
 	if (localStorage.getItem("token-user")  !== null){
-	    let cipher = $('#messageOut').text();
+	    let cipher = encodeMessage($('#messageOut').text());
 	    let title = $('#titleMessage').val();
 	    let dataFill = JSON.stringify({"title":title,
 					   "cipher":cipher
@@ -342,7 +356,7 @@ function addFunctions(){
 		$('body').removeClass('modal-open');
 		$('.modal-backdrop').remove();
 		clearMessage();
-		$('#messageOut').append(`<p>`+data.cipher+`</p>`);
+		$('#messageOut').append(`<p>`+decodeMessage(data.cipher)+`</p>`);
 		$('#titleMessage').val(data.title);
 	    })
 	    .fail(function( jqXHR, textStatus, errorThrown ) {

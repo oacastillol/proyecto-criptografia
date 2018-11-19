@@ -11,18 +11,18 @@ def encode():
     """
     req_data = request.get_json()
     exist = 'type' not in req_data or 'message' not in req_data or 'key' not in req_data
-    void = not exist and (req_data['type'] == '' or req_data['message'] == '' or req_data['key'] == '')
+    void = not exist and (req_data['type'] == '' or len(req_data['message']) == 0 or len(req_data['key']) == 0)
     if exist or void:
           return custom_response({'error': 'se requiere un mensaje una llave y un tipo para cifrar'}, 400)
     else:
-        message = req_data['message']
-        key = req_data['key']
+        message = [int(i) for i in req_data['message']]
+        key = [int(i) for i in req_data['key']]
         tipo = req_data['type']
     if tipo == "DES":
-        cipher = DES(message,tipo,'cipher');
+        cipher = DES(message,key,'cipher');
         return  custom_response({"message":cipher},200)
     else:
-        cipher = pcifrado(message,tipo);
+        cipher = pcifrado(message,key);
         return  custom_response({"message":cipher},200)
 
 
@@ -33,12 +33,12 @@ def decode():
     """
     req_data = request.get_json()
     exist = 'type' not in req_data or 'message' not in req_data or 'key' not in req_data
-    void = not exist and (req_data['type'] == '' or req_data['message'] == '' or req_data['key'] == '')
+    void = not exist and (req_data['type'] == '' or len(req_data['message']) == 0 or len(req_data['key']) == 0)
     if exist or void:
           return custom_response({'error': 'se requiere un mensaje una llave y un tipo para descifrar'}, 400)
     else:
-        message = req_data['message']
-        key = req_data['key']
+        message = [int(i) for i in req_data['message']]
+        key = [int(i) for i in req_data['key']]
         tipo = req_data['type']
     if  tipo == "DES":
         cipher = DES(message,key,'descipher')

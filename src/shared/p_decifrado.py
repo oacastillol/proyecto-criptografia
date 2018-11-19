@@ -1,4 +1,4 @@
-from keyGenerator import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
+from .keyGenerator import keyGenerator # Modulo encargado de generar las llaves, tomando comopartida la llave dada por el usuario.
 #NOTA: puede funcionar con 4 6 8 bytes o demas, tener cuidad con message y key
 #El dogma del Algoritmo propio, asi igualmente se le llamara
 def gimg1859():
@@ -108,11 +108,12 @@ def d_relleno(list1):
 def p_mensaje(list1):
     atexto = ''.join(list1)
     return atexto
-def p_decifrado(message, key,c_rango):
+def pdecifrado(message, key):
     lista = []
         #Paso a cada letra y numero a ascii
     estatico = gimg1859()
     rango_m = len(message)
+    c_rango=rango_m
     rango_k = len(key)
     rango  = 0
     while rango <= rango_m:
@@ -133,7 +134,7 @@ def p_decifrado(message, key,c_rango):
                 print ('error en rango de mensaje')
 
         #En dado caso que la key tenga mas de 8 bytes solo toma encuenta los primeros 8
-        list2 = d_relleno(d_ascii(key))
+        list2 = d_relleno(key)
         #[1, 253, 1, 253, 147, 158, 147, 158] mensaje cifrado
         #clave
         #Etapa inicial del Algoritmo gimg1859
@@ -169,6 +170,5 @@ def p_decifrado(message, key,c_rango):
             eliminar = int(rango - c_rango)
             for k in range (eliminar):
                 lista.pop()
-
     return (lista)
 
