@@ -126,7 +126,7 @@ def pdecifrado(message, key):
         for m in range (8):
             if (m+rango) >= rango_m:
 
-                list1 = c_relleno(list1)
+                list1 = d_relleno(list1)
                 m = 8
             elif rango <= rango_m:
                 list1.append(message[m+rango])
@@ -171,4 +171,3 @@ def pdecifrado(message, key):
             for k in range (eliminar):
                 lista.pop()
     return (lista)
-
