@@ -137,7 +137,8 @@ def pcifrado(lista_m, key):
                 print ('error en rango de mensaje')
         #    print ('lis1: ',list1, 'lista_m: ',lista_m, "rango&m",(rango+m), 'rango: ',rango, 'm: ',m)
         #En dado caso que la key tenga mas de 8 bytes solo toma encuenta los primeros 8
-        list2 = c_relleno(key)
+        list2 = c_relleno(c_ascii(key))
+        #list2 = c_relleno(key)
         #Etapa inicial del Algoritmo gimg1859
         c_1 = c_suma(estatico,list1)
         #Estapa intermedia - podria usar un def mas pero mientras tanto asi
