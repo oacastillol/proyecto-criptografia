@@ -102,7 +102,7 @@ ipInv = [
 #OUT -> result: lista de valores  de los datos ingresados, con espacios l definido por el largo del data
 def bitsDeString(datos):
 	#ord recibe cada uno de los string de data y lo convierte a unicode
-	datos = [ord(x) for x in datos]
+	#datos = [ord(x) for x in datos]
 	l = len(datos) * 8
 	result = [0] * l
 	pos = 0
@@ -134,7 +134,8 @@ def stringDeBits(datos):
 			c = 0
 		pos += 1
 	#chr retorna el valor unicodigo de cada x en resultado
-	return ''.join([ chr(x) for x in result ])
+	return result 
+	#return ''.join([ chr(x) for x in result ])
 
 
 #Realiza la permutacion del bloque entrante con la tabla correspondiente, usando un mapeo de funcion lambda
@@ -250,36 +251,40 @@ def cipher(msg,key,type):
 #IN -> type: tipo de cifrado, 'cipher' para cifrado, el resto es descifrado
 #OUT -> c: string unificado de particiones tratadas del mensaje, resultado de mensaje cifrado o descifrado
 def DES(msg,key,type):
-	#verifica si la llave es de 8 caracteres
-	if len(key)<8:
-		while len(key)<8:
-			key = key + 'x'
-	else:
-		key = key[:8]
+        #verifica si la llave es de 8 caracteres
+        if len(key)<8:
+                while len(key)<8:
+                        key.append(1)
+                        
+        else:
+                key = key[:8]
 
 	#inicializacion de string respuesta y temporal para espacio de 8 caracteres por cifrado
-	c = ""
-	temp = ""
+        c = []
+        temp = ""
 
 	#division del mensaje en espacios de 8 caracteres, guardado de respectivos cifrados
-	while len(msg) > 7:
-		temp = msg[:8]
-		res = cipher(temp,key,type)
-		c += ''.join(map(str,res))
-		msg = msg[8:]
-	#si el mensaje no es multiplo de 8 rellena con x al final y ejecuta ultima iteracion de msg para encontrar cifrado
-	if len(msg) > 0:
-		while len(msg) <8:
-			msg = msg + 'x'
-		res = cipher(msg,key,type)
-		c += ''.join(map(str,res))
-	#print("cipher", c)
-	return c
+        while len(msg) > 7:
+                temp = msg[:8]
+                res = cipher(temp,key,type)
+                c.extend(res)
+                msg = msg[8:]
+        #si el mensaje no es multiplo de 8 rellena con x al final y ejecuta ultima iteracion de msg para encontrar cifrado
+        if len(msg) > 0:
+                while len(msg) <8:
+                        msg.append(1)
+                res = cipher(msg,key,type)
+                c.extend(res)
+                #print("cipher", c)
+        return c
 
 
 # MAIN
 #msg = "prueba"
+#msg = [ 112, 114, 117, 101, 98, 97 ]
 #key = "llave065"
+#key = [ 108, 108, 97, 118, 101, 48, 54, 53 ]
 #c = DES(msg,key,"cipher")
-#DES(c,key,"")
-
+#print('c',c)
+#d = DES(c,key,"")
+#print('d',d)
