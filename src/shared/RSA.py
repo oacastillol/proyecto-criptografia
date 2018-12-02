@@ -32,30 +32,30 @@ def MyOwnRSA():
 
 
 # Cifrado de mensaje
-# IN -> m, mensaje a cifrar
+# IN -> m, mensaje a cifrar (conjunto valores enteros positivos)
 # IN -> en, llave publica de cifrado
 # OUT -> y, mensaje cifrado
 def encrypt(m, en):
 	c = []
 
 	for i in m:
-		z = powerMod(int(i), en[0], en[1])
-		# print ('#:{0}, e:{1}, n:{2}, z:{3}'.format(int(i), en[0], en[1], z))
+		z = powerMod(i, en[0], en[1])
+		# print ('#:{0}, e:{1}, n:{2}, z:{3}'.format(i, en[0], en[1], z))
 		c.append(z)
 
 	return c
 
 
 # Descifrado de mensaje
-# IN -> c, mensaje a desifrar
+# IN -> c, mensaje a desifrar (conjunto valores enteros positivos)
 # IN -> dn ,llave privada de descifrado
 # OUT -> m, mensaje descifrado
 def decrypt(c, dn):
 	m = []
 
 	for i in c:
-		z = powerMod(int(i), dn[0], dn[1])
-		# print ('#:{0}, d:{1}, n:{2}, z:{3}'.format(int(i), dn[0], dn[1], z))
+		z = powerMod(i, dn[0], dn[1])
+		# print ('#:{0}, d:{1}, n:{2}, z:{3}'.format(i, dn[0], dn[1], z))
 		m.append(z)
 
 	return m
@@ -112,12 +112,12 @@ def powerMod(a, b, n):
 # print ("Private Key: ", Keep)
 #
 # msg = "6882326879666683"
-# m =[]
+# m = []
 #
 # step = math.ceil(len(msg)/num_bloq)
 # for i in range(0, len(msg), step):
 # 	val = msg[i:i+step]
-# 	m.append(val)
+# 	m.append(int(val))
 #
 # print ('msg', msg, m)
 # c = encrypt(m, Publish)
