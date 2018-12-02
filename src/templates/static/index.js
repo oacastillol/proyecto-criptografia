@@ -102,7 +102,7 @@ function loadMessages(){
 					<input type="radio" name="msjId" value="`+e.id+`">  `+e.title+`</label>
 							   </div>
 			    </td>
-			    <td>`+decodeMessage(e.cipher)+`</td>
+			    <td>`+decodeMessage(JSON.parse(e.cipher))+`</td>
 							   </tr>`);
 		    });
 		$("#myMessage").modal();
@@ -238,7 +238,7 @@ function addFunctions(){
     $('#guardar').click(function(event){
 	event.preventDefault();
 	if (localStorage.getItem("token-user")  !== null){
-	    let cipher = encodeMessage($('#messageOut').text());
+	    let cipher = JSON.stringify(encodeMessage($('#messageOut').text()));
 	    let title = $('#titleMessage').val();
 	    let dataFill = JSON.stringify({"title":title,
 					   "cipher":cipher
@@ -356,7 +356,7 @@ function addFunctions(){
 		$('body').removeClass('modal-open');
 		$('.modal-backdrop').remove();
 		clearMessage();
-		$('#messageOut').append(`<p>`+decodeMessage(data.cipher)+`</p>`);
+		$('#messageOut').append(`<p>`+decodeMessage(JSON.parse(data.cipher))+`</p>`);
 		$('#titleMessage').val(data.title);
 	    })
 	    .fail(function( jqXHR, textStatus, errorThrown ) {
