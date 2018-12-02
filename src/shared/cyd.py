@@ -5,13 +5,13 @@ from p_decifrado import *
 
 #MAIN
 mensaje = list('soy estudiante de la unal')
-key = list('')
+key = list('criptografia')
 #recibo el mensaje cifrado y el tamano del mensaje original
-cifrado,rango_mensaje = p_cifrado(mensaje,key)
+cifrado,rango_mensaje = pcifrado(mensaje,key)
 #imprime cifrado y el rango de este
 print ('cifrado: ',cifrado, (len(cifrado)))
 #recibe el mensaje cifrado, la clave y el rango del mensaje original
-decifrado = p_decifrado(cifrado, key,rango_mensaje)
+decifrado = pdecifrado(cifrado, key,rango_mensaje)
 print('decifrado en ASCII', decifrado)
 caracter = d_caracter(decifrado)
 print('decifrado: ',caracter, (len(caracter)))
