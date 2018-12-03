@@ -84,7 +84,7 @@ def signatureVerification(hash, y, en):
 # Algoritmo Euclidiano Extendido
 # IN -> a, b enteros positivos donde: a>=b
 # OUT -> d, x, y donde d = GCD(a,b) x, y enteros de modo que cumple ax + by = d
-def extendedEuclideanAlgorithm (a, b):
+def extendedEuclideanAlgorithm(a, b):
 	if b == 0:
 		# print (a, b, '-', a, 1, 0)
 		return a, 1, 0
