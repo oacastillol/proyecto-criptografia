@@ -20,7 +20,8 @@ def create_app(env_name):
   app.register_blueprint(user_blueprint, url_prefix='/api/v1/users')
   app.register_blueprint(message_blueprint, url_prefix='/api/v1/messages')
   app.register_blueprint(cipher_blueprint, url_prefix='/api/v1/cipher')
-  
+
+
   """
   PARTIAL FRONT
   """

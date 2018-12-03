@@ -254,7 +254,7 @@ def DES(msg,key,type):
         #verifica si la llave es de 8 caracteres
         if len(key)<8:
                 while len(key)<8:
-                        key.append(1)
+                        key.append(10)
                         
         else:
                 key = key[:8]
@@ -272,7 +272,7 @@ def DES(msg,key,type):
         #si el mensaje no es multiplo de 8 rellena con x al final y ejecuta ultima iteracion de msg para encontrar cifrado
         if len(msg) > 0:
                 while len(msg) <8:
-                        msg.append(1)
+                        msg.append(10)
                 res = cipher(msg,key,type)
                 c.extend(res)
                 #print("cipher", c)
