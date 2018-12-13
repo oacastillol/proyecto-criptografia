@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 # Función para generar las keys de cada iteración, generadas por transposición.
 
+
 # Genera la función de transposicion, segun la key ingresada.
 # IN -> key: es la llave ingresada por el usuario.
 # OUT -> swapKey: función de transposicion.
 def keySeed(key):
-	orderKey = sorted(key)
-	swapKey = []
+    orderKey = sorted(key)
+    swapKey = []
 
-	for k in key:
-		ind = orderKey.index(k)
-		swapKey.append(ind)
-		orderKey[ind] = None
+    for k in key:
+        ind = orderKey.index(k)
+        swapKey.append(ind)
+        orderKey[ind] = None
 
-	return swapKey
+    return swapKey
 
 
 # Realiza la transposición de cada keyself.
@@ -21,11 +22,11 @@ def keySeed(key):
 # IN -> swapKey: función de transposición.
 # OUT -> newKey: la nueva key despues de la transposición.
 def swap(actKey, swapKey):
-	newKey = ""
-	for i in swapKey:
-		newKey += actKey[i]
+    newKey = ""
+    for i in swapKey:
+        newKey += actKey[i]
 
-	return newKey
+    return newKey
 
 
 # Genera las llaves de cada iteración
@@ -33,15 +34,15 @@ def swap(actKey, swapKey):
 # IN -> it: cantidad de iteraciones, keys a generar.
 # OUT -> keys: lista de keys.
 def keyGenerator(key, it):
-	keys = []
-	swapKey = keySeed(key)
-	# print(swapKey)
+    keys = []
+    swapKey = keySeed(key)
+    # print(swapKey)
 
-	for i in range(it):
-		keys.append(key)
-		key = swap(key, swapKey)
+    for i in range(it):
+        keys.append(key)
+        key = swap(key, swapKey)
 
-	return keys
+    return keys
 
 
 # MAIN

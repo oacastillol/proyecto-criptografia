@@ -7,7 +7,7 @@ class MessageModel(db.Model):
     """
     Message Model from users
     """
-    __tablename__='messages'
+    __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
@@ -26,7 +26,7 @@ class MessageModel(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
-        
+
     def update(self, data):
         for key, item in data.items():
             setattr(self, key, item)
@@ -36,29 +36,30 @@ class MessageModel(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
-  
+
     @staticmethod
     def get_all_messages():
         return MessageModel.query.all()
-  
+
     @staticmethod
     def get_one_message(id):
         return MessageModel.query.get(id)
+
     @staticmethod
     def get_all_messages_by_user(value):
         return MessageModel.query.filter_by(owner_id=value).all()
-    
+
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
 
 class MessageSchema(Schema):
-  """
+    """
   Message Schema
   """
-  id = fields.Int(dump_only=True)
-  title = fields.Str(required=True)
-  cipher = fields.Str(required=True)
-  owner_id = fields.Int(required=True)
-  created_at = fields.DateTime(dump_only=True)
-  modified_at = fields.DateTime(dump_only=True)
+    id = fields.Int(dump_only=True)
+    title = fields.Str(required=True)
+    cipher = fields.Str(required=True)
+    owner_id = fields.Int(required=True)
+    created_at = fields.DateTime(dump_only=True)
+    modified_at = fields.DateTime(dump_only=True)
