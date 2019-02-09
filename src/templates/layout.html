@@ -3,7 +3,47 @@
 {% block title %}Kodilo{% endblock %}
 {% block head%}
 {{super()}}
- <meta charset="UTF-8"> 
+<script language="javascript">
+	function muestra_info(){
+    document.getElementById('cajainfo').style.display = "block"
+	}
+</script>
+<script language="javascript">
+	function oculta_info(){
+    document.getElementById('cajainfo').style.display = "none"
+	}
+</script>
+<script language="javascript">
+	function muestra_info_cifrado(){
+    document.getElementById('cajainfocifrado').style.display = "block"
+	}
+</script>
+<script language="javascript">
+	function oculta_info_cifrado(){
+    document.getElementById('cajainfocifrado').style.display = "none"
+	}
+</script>
+<script language="javascript">
+	function muestra_info_kodilo(){
+    document.getElementById('kodiloinfo').style.display = "block"
+	}
+</script>
+<script language="javascript">
+	function oculta_info_kodilo(){
+    document.getElementById('kodiloinfo').style.display = "none"
+	}
+</script>
+<script language="javascript">
+	function muestra_info_texto(){
+    document.getElementById('cajainfotexto').style.display = "block"
+	}
+</script>
+<script language="javascript">
+	function oculta_info_texto(){
+    document.getElementById('cajainfotexto').style.display = "none"
+	}
+</script>
+ <meta charset="UTF-8">
 {% endblock%}
 {% block navbar %}
 <nav class="navbar navbar-default">
@@ -16,14 +56,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Kodilo</a>
+      <a class="navbar-brand" onMouseOver="muestra_info_kodilo()" onmouseout="oculta_info_kodilo()" href="#">Kodilo</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
 	<li id="liPerfil"> <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myPerfil" id="perfilBtn">Perfil</button>
-	
+
         <li id="liMensajes"><button type="button" class="btn btn-link" id="messages">Mensajes</button></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

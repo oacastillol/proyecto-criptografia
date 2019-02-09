@@ -7,15 +7,15 @@
 	    <p id="messageError"></p>
 	</div>
     </div>
-    
+
     <div class="row">
         <div class="form-group">
 	    <div class="input-group col-sm-12">
                 <label for="typeCipher" class="col-sm-2 control-label">Tipo de Cifrado</label>
                 <div class="col-sm-10">
-		    <select class="form-control" id="typeCipher">
+		    <select class="form-control" onMouseOver="muestra_info_cifrado()" onmouseout="oculta_info_cifrado()"  id="typeCipher">
                         <option>DES</option>
-                        <option>gimg1859</option>
+                        <option >gimg1859</option>
 		    </select>
                 </div>
 	    </div>
@@ -25,7 +25,7 @@
         <div class="form-group">
 	    <div class="input-group col-sm-12">
                 <label for="messageIn">Texto de entrada</label>
-                <textarea class="form-control" rows="5" id="messageIn"></textarea>
+                <textarea class="form-control" onMouseOver="muestra_info_texto()" onmouseout="oculta_info_texto()"rows="5" id="messageIn"></textarea>
 	    </div>
         </div>
     </div>
@@ -38,8 +38,49 @@
                 </div>
                 <div class="col-sm-6">
 		    <div class="btn-group" role="group" aria-label="Ejecutar">
-                        <button type="button" class="btn btn-default" id="cifrar">Cifrar</button>
-                        <button type="button" class="btn btn-default" id="descifrar">Descifrar</button>
+          <div class="">
+              <button type="button" class="btn btn-default" onMouseOver="muestra_info()" onmouseout="oculta_info()" id="cifrar">Cifrar</button>
+              <button type="button" class="btn btn-default" onMouseOver="muestra_info()" onmouseout="oculta_info()" id="descifrar">Descifrar</button>
+              <div id="cajainfocifrado" style="display:none">
+                <div class="card bg-info text-white">
+                  <div class="card-body">
+                    <h5>El tipo cifrado <kbd>DES</kbd>
+El algoritmo se encarga de realizar combinaciones, sustituciones y permutaciones entre el texto a cifrar y la clave, asegurándose al mismo tiempo de que las operaciones puedan realizarse en ambas direcciones (para el descifrado). La combinación entre sustituciones y permutaciones se llama cifrado del producto.
+                  <h5>El tipo cifrado <kbd>gimg1859</kbd> se llama ası́ dado que en las etapas iniciales y finales se trabaja como
+una constante en su forma ASCII, dentro del cifrado como también en el descifrado.
+                  </div>
+                </div>
+                </div>
+              <div id="cajainfo" style="display:none">
+                <div class="card bg-info text-white">
+                  <div class="card-body">
+                    <h5>Tenga en cuenta el tipo de cifrado a la hora de <kbd>cifrar y descrifrar</kbd> y que su <kbd>llave de cifrado</kbd> sea la correspondiente</h5>
+
+                  </div>
+                </div>
+
+              </div>
+              <div id="kodiloinfo" style="display:none">
+                <div class="card bg-info text-white">
+                  <div class="card-body">
+                        <h4>La aplicación <kbd>Kodilo</kbd>, presenta una interfaz minimalista al estilo de Google Translator.
+                        El nombre <kbd>Kodilo</kbd> proviene de la palabra ‘codificación’ traducida al idioma Esperanto.</h4>
+                  </div>
+                </div>
+
+              </div>
+              <div id="cajainfotexto" style="display:none">
+                <div class="card bg-info text-white">
+                  <div class="card-body">
+                    <h5>Escriba un texto a cifrar o pegue aqui su salida generada en el cifrado segun lo que corresponda</h5>
+
+                  </div>
+                </div>
+
+              </div>
+          </div>
+
+
 		    </div>
                 </div>
 	    </div>
@@ -111,7 +152,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>		
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-info pull-right" id="savePerfil">Guardar</button>
             </div>
         </div>
