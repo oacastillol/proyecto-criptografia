@@ -4,6 +4,11 @@ from ..shared.p_cifrado import pcifrado
 from ..shared.p_decifrado import pdecifrado
 cipher_api = Blueprint('cipher_api', __name__)
 test = '123'
+"""
+Este Controlador se encarga de procesar y responder
+a las solicitudes de codificación y codificación de
+mensajes.
+"""
 
 
 @cipher_api.route('/encode', methods=['POST'])
@@ -16,7 +21,7 @@ def encode():
     if exist:
         return custom_response({
             'error':
-            'se requiere un mensaje una llave y un tipo para cifrar'
+            'se requiere un mensaje una llave de minimo 8 caracteres y un tipo para cifrar'
         }, 400)
     else:
         message = [int(i) for i in req_data['message']]
@@ -35,7 +40,7 @@ def validateReqData(req_data):
              ('key' not in req_data))
     void = not exist and (
         req_data['type'] == '' or len(req_data['message']) == 0
-        or len(req_data['key']) == 0)
+        or len(req_data['key']) < 8)
     return exist or void
 
 
@@ -49,7 +54,7 @@ def decode():
     if exist:
         return custom_response({
             'error':
-            'se requiere un mensaje una llave y un tipo para descifrar'
+            'se requiere un mensaje una llave de minimo 8 caracteres y un tipo para descifrar'
         }, 400)
     else:
         message = [int(i) for i in req_data['message']]

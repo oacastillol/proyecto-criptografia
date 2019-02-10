@@ -6,6 +6,11 @@ from .controllers.UserController import user_api as user_blueprint
 from .controllers.MessageController import message_api as message_blueprint
 from .controllers.CipherController import cipher_api as cipher_blueprint
 
+"""
+Inicio  de la aplicación, crea el proceso y llama a los controladores
+a los cuales va a responder la aplicación.
+"""
+
 
 def create_app(env_name):
     """

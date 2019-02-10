@@ -4,6 +4,10 @@ from flask import json, Response, request, g
 from functools import wraps
 from ..models.UserModel import UserModel
 from .RSA import encrypt, digitalSignature, decrypt, signatureVerification, public_key, private_key
+"""
+Se encarga del control de tokens y acceso a los diferentes modulos
+del programa
+"""
 
 
 class Auth():
@@ -23,24 +27,31 @@ class Auth():
         #     Decode token method
         #     """
         re = {'data': {}, 'error': {}}
-        payload = Auth.validarAutenticacion(
-            list(map(int, token.split(","))), public_key, private_key)
-        if payload['sig']:
-            actual = datetime.datetime.utcnow()
-            if actual < payload['exp'] and actual > payload['ini']:
-                re['data'] = {'user_id': payload['sub']}
-                return re
+        try:
+            payload = Auth.validarAutenticacion(
+                list(map(int, token.split(","))), public_key, private_key)
+        except Exception:
+            re['error'] = {
+                'error': 'Su token expiro, por favor vuelva a logearse'
+            }
+        else:
+            if payload['sig']:
+                actual = datetime.datetime.utcnow()
+                if actual < payload['exp'] and actual > payload['ini']:
+                    re['data'] = {'user_id': payload['sub']}
+                    return re
+                else:
+                    re['error'] = {
+                        'error': 'Su token expiro, por favor vuelva a logearse'
+                    }
+                    return re
             else:
                 re['error'] = {
-                    'message': 'Su token expiro, por favor vuelva a logearse'
+                    'error':
+                    'Token invalido, por favor intentelo con un nuevo token'
+
                 }
-                return re
-        else:
-            re['error'] = {
-                'message':
-                'Token invalido, por favor intentelo con un nuevo token'
-            }
-            return re
+        return re
 
     @staticmethod
     def auth_required(func):
@@ -56,14 +67,14 @@ class Auth():
                         'error':
                         'El token de autenticación no está disponible, inicia sesión para obtener uno'
                     }),
-                    status=400)
+                    status=401)
             token = request.headers.get('api-token')
             data = Auth.decode_token(token)
             if data['error']:
                 return Response(
                     mimetype="application/json",
                     response=json.dumps(data['error']),
-                    status=400)
+                    status=401)
             user_id = data['data']['user_id']
             check_user = UserModel.get_one_user(user_id)
             if not check_user:
@@ -73,7 +84,7 @@ class Auth():
                         'error':
                         'el usuario no existe, token no válido'
                     }),
-                    status=400)
+                    status=401)
             g.user = {'id': user_id}
             return func(*args, **kwargs)
 

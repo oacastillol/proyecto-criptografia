@@ -1,10 +1,14 @@
-from flask import request, json, Response, Blueprint, g
+from flask import request, json, Response, Blueprint, g, escape
 from ..models.UserModel import UserModel, UserSchema
 from ..shared.Authentication import Auth
 from re import match
-
 user_api = Blueprint('users', __name__)
 user_schema = UserSchema()
+
+"""
+Se encarga de responder y manejar la información
+de acceso de los usuarios
+"""
 
 
 @user_api.route('/', methods=['POST'])
@@ -22,6 +26,7 @@ def create():
             'Necesitas un usuario y una contraseña para registrarte'
         }, 400)
     # check if user already exist in the db
+    data["username"] = escape(data["username"])
     user_in_db = UserModel.get_user_by_username(data.get('username'))
     if user_in_db:
         message = {
@@ -61,6 +66,7 @@ def login():
             'error':
             'Necesitas un usuario y una contraseña para iniciar sesión'
         }, 400)
+    data["username"] = escape(data["username"])
     user = UserModel.get_user_by_username(data.get('username'))
     if not user:
         return custom_response({'error': 'credenciales no validas'}, 400)
@@ -101,6 +107,7 @@ def update():
             'Asegurece que su contraseña sea de minimo 8 caracteres, que incluya un número, una mayuscula y un caracter especial'
         }
         return custom_response(message, 400)
+    data["username"] = escape(data["username"])
     user = UserModel.get_one_user(g.user.get('id'))
     user.update(data)
     ser_user = user_schema.dump(user).data

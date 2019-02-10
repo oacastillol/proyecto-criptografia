@@ -1,9 +1,12 @@
-from flask import request, g, Blueprint, json, Response
+from flask import request, g, Blueprint, json, Response, escape
 from ..shared.Authentication import Auth
 from ..models.MessageModel import MessageModel, MessageSchema
-
 message_api = Blueprint('message_api', __name__)
 message_schema = MessageSchema()
+"""
+Se encarga de procesar y responder las solicitudes
+de guardado y lectura de mensajes de cada usuario
+"""
 
 
 @message_api.route('/', methods=['POST'])
@@ -17,6 +20,7 @@ def create():
     data, error = message_schema.load(req_data)
     if error:
         return custom_response(error, 400)
+    data["title"] = escape(data["title"])
     message = MessageModel(data)
     message.save()
     data = message_schema.dump(message).data
@@ -66,6 +70,7 @@ def update(message_id):
     data, error = message_schema.load(req_data, partial=True)
     if error:
         return custom_response(error, 400)
+    data["title"] = escape(data["title"])
     message.update(data)
 
     data = message_schema.dump(message).data

@@ -88,7 +88,7 @@ function loadMessages(){
 	    dataType: "json",
 	    headers:headersFill,
 	    contentType: "application/json; charset=utf-8",
-	    url: "/api/v1/messages",
+	    url: "/api/v1/messages/",
 	})
 	    .done(function( data ) {
 		$("#tbMessages tbody").remove();

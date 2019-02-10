@@ -1,4 +1,9 @@
 import os
+"""
+Se usa para definir los entornos validos para la
+aplicación y sus respectivos parametros o variables
+de entorno
+"""
 
 
 class Development(object):
