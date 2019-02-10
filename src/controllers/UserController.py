@@ -1,6 +1,7 @@
 from flask import request, json, Response, Blueprint, g
 from ..models.UserModel import UserModel, UserSchema
 from ..shared.Authentication import Auth
+from re import match
 
 user_api = Blueprint('users', __name__)
 user_schema = UserSchema()
@@ -28,6 +29,12 @@ def create():
             'El usuario ya existe, por favor seleccione otro nombre de usuario'
         }
         return custom_response(message, 400)
+    if not validate_password(data.get('password')):
+        message = {
+            'error':
+            'Asegurece que su contraseña sea de minimo 8 caracteres, que incluya un número, una mayuscula y un caracter especial'
+        }
+        return custom_response(message, 400)
     user = UserModel(data)
     user.save()
     ser_data = user_schema.dump(user).data
@@ -35,7 +42,7 @@ def create():
     return custom_response({'jwt_token': token}, 201)
 
 
-@user_api.route('/', methods=['GET'])
+# @user_api.route('/', methods=['GET'])
 @Auth.auth_required
 def get_all():
     users = UserModel.get_all_users()
@@ -88,7 +95,12 @@ def update():
     data, error = user_schema.load(req_data, partial=True)
     if error:
         return custom_response(error, 400)
-
+    if not validate_password(data.get('password')):
+        message = {
+            'error':
+            'Asegurece que su contraseña sea de minimo 8 caracteres, que incluya un número, una mayuscula y un caracter especial'
+        }
+        return custom_response(message, 400)
     user = UserModel.get_one_user(g.user.get('id'))
     user.update(data)
     ser_user = user_schema.dump(user).data
@@ -115,6 +127,14 @@ def get_me():
     user = UserModel.get_one_user(g.user.get('id'))
     ser_user = user_schema.dump(user).data
     return custom_response(ser_user, 200)
+
+
+def validate_password(password):
+    if match(
+            r'^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9\S]{8,}$', password, flags=0) is None:
+        return False
+    else:
+        return True
 
 
 def custom_response(res, status_code):
