@@ -32,9 +32,9 @@
     <div class="row">
         <div class="form-group">
 	    <div class="input-group col-sm-12">
-                <label for="key" class="col-sm-2 control-label">llave de cifrado</label>
+                <label for="key" class="col-sm-2 control-label" onMouseOver="muestra_info_llave()" onmouseout="oculta_info_llave()">llave de cifrado</label>
                 <div class="col-sm-4">
-		    <input class="form-control" type="text" id="key"></input>
+		    <input class="form-control" type="text" id="key" onMouseOver="muestra_info_llave()" onmouseout="oculta_info_llave()"></input>
                 </div>
                 <div class="col-sm-6">
 		    <div class="btn-group" role="group" aria-label="Ejecutar">
@@ -73,6 +73,15 @@ una constante en su forma ASCII, dentro del cifrado como también en el descifra
                 <div class="card bg-info text-white">
                   <div class="card-body">
                     <h5>Escriba un texto a cifrar o pegue aqui su salida generada en el cifrado segun lo que corresponda</h5>
+
+                  </div>
+                </div>
+
+              </div>
+              <div id="cajainfollave" style="display:none">
+                <div class="card bg-info text-white">
+                  <div class="card-body">
+                    <h5>Escriba una llave de minimo 8 caracteres</h5>
 
                   </div>
                 </div>
